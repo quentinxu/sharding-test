@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.sharding.TCustMapper">
+	<resultMap id="BaseResultMap"
+		type="com.test.sharding.TCust">
+		<id column="cust_id" property="custId" jdbcType="INTEGER" />
+		<result column="cust_name" property="custName" jdbcType="VARCHAR" />
+		<result column="cust_mobile" property="custMobile" jdbcType="VARCHAR" />
+		<result column="gender" property="gender"	jdbcType="TINYINT" />
+	</resultMap>
+	
+	<delete id="deleteByPrimaryKey"
+		parameterType="int">
+		delete from t_cust
+		where cust_id =	#{custId,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert"
+		parameterType="com.test.sharding.TCust">
+		insert into t_cust ( cust_name,cust_mobile,gender)
+		values (#{custName,jdbcType=VARCHAR},
+		#{custMobile,jdbcType=VARCHAR},
+		#{gender,jdbcType=TINYINT})
+	</insert>
+	
+	<select id="selectAll" resultMap="BaseResultMap">
+		select cust_id, cust_name, cust_mobile,gender
+		from t_cust
+	</select>
+	
+	<select id="selectOne" resultMap="BaseResultMap">
+		select cust_id, cust_name, cust_mobile,gender
+		from t_cust
+		Order by cust_mobile asc
+		limit 2
+	</select>
+	
+	<update id="updateNameByPhone">
+		update t_cust set cust_name= #{custName,jdbcType=VARCHAR}
+		where cust_mobile = #{custMobile,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateNameByPhoneAndGender">
+		update t_cust set cust_name= #{custName,jdbcType=VARCHAR}
+		where cust_mobile =
+		#{custMobile,jdbcType=VARCHAR}
+		and gender = #{gender,jdbcType=TINYINT}
+	</update>
+	
+</mapper>
